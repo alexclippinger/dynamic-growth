@@ -16,7 +16,7 @@ library(sensitivity)
 # 1. Implement forest growth model in R
 
 ```{r forest_growth}
-source('forest_growth.R')
+source('R/forest_growth.R')
 ```
 
 # 2. Run model for 300 years
@@ -92,8 +92,8 @@ sens_C = sobolSalt(model=NULL, X1, X2, nboot=300)
 colnames(sens_C$X) = c("r", "g", "K", "thresh")
 
 # Get functions to compute metrics for each parameter set
-source('compute_metrics.R')
-source('p_wrapper.R')
+source('R/compute_metrics.R')
+source('R/p_wrapper.R')
 
 # Compute results
 all_results = as.data.frame(sens_C$X) %>% 
