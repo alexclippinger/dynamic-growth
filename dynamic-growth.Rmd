@@ -1,0 +1,135 @@
+---
+title: "Dynamic Growth"
+author: "Alex Clippinger"
+date: "5/16/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(deSolve)
+library(sensitivity)
+```
+
+# 1. Implement forest growth model in R
+
+```{r forest_growth}
+source('forest_growth.R')
+```
+
+# 2. Run model for 300 years
+
+- Initial forest size: 10 kg/C
+
+- Canopy closure threshold: 50 kgC
+
+- K: 250 kgC
+
+- r: 0.01
+
+- g: 2 kg/year
+
+```{r ode_solver}
+# Set time range of 300 years
+time = seq(from=1, to=300)
+
+# Set parameters and initial population
+parms = list(r=0.01, g=2, thresh=50, K=250)
+C_initial = 10
+
+# Run ode solver
+growth = ode(C_initial, time, forest_growth, parms)
+
+# Clean column names
+colnames(growth) = c("Time", "Carbon")
+```
+
+```{r graph_results}
+ggplot(as.data.frame(growth), aes(Time, Carbon)) + 
+  geom_point() +
+  labs(y="Forest Biomass (kgC)", x="Year", title="Forest Growth Model") +
+  theme_light()
+```
+
+# 3. Sobol sensitivity analysis
+
+- Parameters (r, g, thresh, K) are all normally distributed with means as given and standard deviation of 10% of mean
+
+```{r sobol_sensitivity}
+# Set number of parameters
+np = 100
+
+# Set parameter mean values
+r_mean = 0.01
+g_mean = 2
+K_mean = 250
+thresh_mean = 50
+
+# Create parameter distributions
+r = rnorm(mean=r_mean, sd=r_mean*0.1, n=np)
+g = rnorm(mean=g_mean, sd=g_mean*0.1, n=np)
+K = rnorm(mean=K_mean, sd=K_mean*0.1, n=np)
+thresh = rnorm(mean=thresh_mean, sd=thresh_mean*0.1, n=np)
+
+# Create dataframe
+X1 = cbind.data.frame(r=r, g=g, K=K, thresh=thresh)
+
+# Repeat to get second set of samples
+r = rnorm(mean=r_mean, sd=r_mean*0.1, n=np)
+g = rnorm(mean=g_mean, sd=g_mean*0.1, n=np)
+K = rnorm(mean=K_mean, sd=K_mean*0.1, n=np)
+thresh = rnorm(mean=thresh_mean, sd=thresh_mean*0.1, n=np)
+
+# Create dataframe
+X2 = cbind.data.frame(r=r, g=g, K=K, thresh=thresh)
+
+# Create Sobel object and get sets of parameters for running the model
+sens_C = sobolSalt(model=NULL, X1, X2, nboot=300)
+
+# Add names to parameter sets
+colnames(sens_C$X) = c("r", "g", "K", "thresh")
+
+# Get functions to compute metrics for each parameter set
+source('compute_metrics.R')
+source('p_wrapper.R')
+
+# Compute results
+all_results = as.data.frame(sens_C$X) %>% 
+  pmap(p_wrapper, C_initial=C_initial, time=time, func=forest_growth)
+
+# Extract results into dataframe
+all_results_df = all_results %>% 
+  map_dfr(`[`, c("maxC", "meanC"))
+```
+
+```{r graph_sensitivity}
+plot_df = all_results_df %>% 
+  gather(key="metric", value="value")
+
+ggplot(plot_df, aes(metric, value, col=metric)) +
+  geom_boxplot() +
+  theme_light()
+```
+
+```{r graph_indices}
+# Get indices for max carbon
+sens_C_maxC = sensitivity::tell(sens_C, all_results_df$maxC)
+
+# Get first-order indices (main effect without covariance)
+sens_C_maxC$S
+
+# Get total sensitivity index
+sens_C_maxC$T
+
+# Repeat for mean carbon
+sens_C_meanC = sensitivity::tell(sens_C, all_results_df$meanC)
+
+# Get first-order indices (main effect without covariance)
+sens_C_meanC$S
+
+# Get total sensitivity index
+sens_C_meanC$T
+```
+
