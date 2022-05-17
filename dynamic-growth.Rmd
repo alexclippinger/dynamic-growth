@@ -110,8 +110,11 @@ plot_df = all_results_df %>%
 
 ggplot(plot_df, aes(metric, value, col=metric)) +
   geom_boxplot() +
-  theme_light()
+  theme_light() +
+  labs(title = "Variation in Maximum and Mean Forest Carbon After 300 Years") + ylab("Carbon (kg)") + xlab("Summary Statistic")
 ```
+
+Sobol Indices for Max Carbon
 
 ```{r graph_indices}
 # Get indices for max carbon
@@ -123,6 +126,15 @@ sens_C_maxC$S
 # Get total sensitivity index
 sens_C_maxC$T
 
+# Plot
+
+plot(sens_C_maxC$S$original)
+plot(sens_C_maxC$T$original)
+```
+
+Sobol Indices for Mean Carbon
+
+```{r graph_indices}
 # Repeat for mean carbon
 sens_C_meanC = sensitivity::tell(sens_C, all_results_df$meanC)
 
@@ -131,5 +143,10 @@ sens_C_meanC$S
 
 # Get total sensitivity index
 sens_C_meanC$T
+
+# Plot
+
+plot(sens_C_meanC$S$original)
+plot(sens_C_meanC$T$original)
 ```
 
