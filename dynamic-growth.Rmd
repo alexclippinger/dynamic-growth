@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Growth"
-author: "Alex Clippinger"
+author: "Alex Clippinger, Shale Hunter, Wylie Hampson"
 date: "5/16/2022"
 output: html_document
 ---
@@ -149,5 +149,6 @@ sens_C_meanC$T
 plot(sens_C_meanC$S$original)
 plot(sens_C_meanC$T$original)
 ```
+**In 2-3 sentences, discuss what the results of your simulation might mean for climate change impacts on forest growth (e.g think about what parameters climate change might influence ).**
 
-**Our sobol sensitivity analysis shows us that for `max_C` the parameter with the highest sensitivity is carrying capacity, and for `mean_C`, the parameter with the highest sensitivity is the exponential growth rate. Both of these parameters can be highly affected by climate change due to the reduction in precipitation and water supply, which affects both carrying capacity and exponential growth rate. On top of that climate change will also cause an increase in drought and forest fires.**
+*Our sobol sensitivity analysis shows us that for `max_C` the parameter with the highest sensitivity is carrying capacity, and for `mean_C`, the parameter with the highest sensitivity is the exponential growth rate. Both of these parameters can be highly affected by climate change due to the reduction in precipitation and water supply. On top of that climate change will also cause an increase in drought and forest fires which can have affects on both carry capacity and exponential growth rate.*
