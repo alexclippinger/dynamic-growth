@@ -1,11 +1,11 @@
 #' Wrapper function to run ODE solver and compute metrics for Sobol sensitivity analysis
 #'
-#' @param r 
-#' @param g 
-#' @param thresh 
-#' @param K 
-#' @param C_initial 
-#' @param time 
+#' @param r early exponential growth rate
+#' @param g linear growth rate
+#' @param thresh threshold canopy closure in units of carbon
+#' @param K carrying capacity in units of carbon
+#' @param C_initial initial forest size measured in units of carbon
+#' @param time time in years
 #' @param func 
 #'
 #' @return
