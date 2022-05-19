@@ -116,7 +116,7 @@ ggplot(plot_df, aes(metric, value, col=metric)) +
 
 Sobol Indices for Max Carbon
 
-```{r graph_indices}
+```{r graph_indices_max}
 # Get indices for max carbon
 sens_C_maxC = sensitivity::tell(sens_C, all_results_df$maxC)
 
@@ -138,7 +138,7 @@ plot(sens_C_maxC$T$original, main = "Sobol Indices (T) for Maximum Carbon")
 
 Sobol Indices for Mean Carbon
 
-```{r graph_indices}
+```{r graph_indices_mean}
 # Repeat for mean carbon
 sens_C_meanC = sensitivity::tell(sens_C, all_results_df$meanC)
 
