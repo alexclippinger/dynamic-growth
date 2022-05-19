@@ -2,7 +2,7 @@
 title: "Dynamic Growth"
 author: "Alex Clippinger, Shale Hunter, Wylie Hampson"
 date: "5/16/2022"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
