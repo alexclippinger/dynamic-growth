@@ -120,6 +120,10 @@ Sobol Indices for Max Carbon
 # Get indices for max carbon
 sens_C_maxC = sensitivity::tell(sens_C, all_results_df$maxC)
 
+# rename
+rownames(sens_C_maxC$T) <- c("r", "g", "K", "thresh")
+rownames(sens_C_maxC$S) <- c("r", "g", "K", "thresh")
+
 # Get first-order indices (main effect without covariance)
 sens_C_maxC$S
 
@@ -128,8 +132,8 @@ sens_C_maxC$T
 
 # Plot
 
-plot(sens_C_maxC$S$original)
-plot(sens_C_maxC$T$original)
+plot(sens_C_maxC$S$original, main = "Sobol Indices (S) for Maximum Carbon")
+plot(sens_C_maxC$T$original, main = "Sobol Indices (T) for Maximum Carbon")
 ```
 
 Sobol Indices for Mean Carbon
@@ -137,6 +141,10 @@ Sobol Indices for Mean Carbon
 ```{r graph_indices}
 # Repeat for mean carbon
 sens_C_meanC = sensitivity::tell(sens_C, all_results_df$meanC)
+
+# rename
+rownames(sens_C_meanC$T) <- c("r", "g", "K", "thresh")
+rownames(sens_C_meanC$S) <- c("r", "g", "K", "thresh")
 
 # Get first-order indices (main effect without covariance)
 sens_C_meanC$S
@@ -146,9 +154,9 @@ sens_C_meanC$T
 
 # Plot
 
-plot(sens_C_meanC$S$original)
-plot(sens_C_meanC$T$original)
+plot(sens_C_meanC$S$original, main = "Sobol Indices (S) for Mean Carbon")
+plot(sens_C_meanC$T$original, main = "Sobol Indices (T) for Mean Carbon")
 ```
 **In 2-3 sentences, discuss what the results of your simulation might mean for climate change impacts on forest growth (e.g think about what parameters climate change might influence ).**
 
-*Our sobol sensitivity analysis shows us that for `max_C` the parameter with the highest sensitivity is carrying capacity, and for `mean_C`, the parameter with the highest sensitivity is the exponential growth rate. Both of these parameters can be highly affected by climate change due to the reduction in precipitation and water supply. On top of that climate change will also cause an increase in drought and forest fires which can have affects on both carry capacity and exponential growth rate.*
+*Our sobol sensitivity analysis shows us that for `max_C` the parameter with the highest sensitivity is carrying capacity, and for `mean_C`, the parameter with the highest sensitivity is the exponential growth rate. Both of these parameters can be highly affected by climate change due to the reduction in precipitation and water supply. On top of that climate change will also cause an increase in drought and forest fires which can have affects on both carrying capacity and exponential growth rate.*
